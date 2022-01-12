@@ -80,4 +80,4 @@ if __name__ == '__main__':
     #     y = pickle.load(f)
     # timing = load(PATH + TIMER)
     timing = Timing()
-    app.run(host='127.0.0.1', port=5000)
+    app.run(host="ec2-3-70-178-147.eu-central-1.compute.amazonaws.com", port=8080)
