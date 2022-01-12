@@ -80,7 +80,7 @@ def get_avg_time():
     time = request.args.get('time')
     avg_time = timing.get_avg_time(float(lat), float(lng), None)  # replace None with time when relevant
 
-    return str(round(avg_time))
+    return int(round(avg_time))
 
 
 if __name__ == '__main__':

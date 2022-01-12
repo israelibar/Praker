@@ -16,7 +16,7 @@ def get_time_from_api(df, n=SAMPLE_TEST):
     @:return: np.array of predictions ('0' or '1')
     """
     x = df.sample(n, random_state=42).to_dict('records')
-    preds = np.array([float(requests.get(url=LOCAL_URL + ROUTE, params=row).text)
+    preds = np.array([float(requests.get(url=URL + ROUTE, params=row).text)
                       for row in x])
     return preds
 
