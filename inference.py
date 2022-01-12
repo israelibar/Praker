@@ -63,6 +63,11 @@ class Timing:
 
 app = Flask('Get averaged time for parking')
 
+# @app.route('/'):
+# def print_enter_params():
+#     return ('Use the ROUTE: /get_avg_time\nEnter parameters: "lat","lng","time" for latitude, longitude and time\n' \
+#            'Returned: Averages time to find parking (minutes)')
+
 
 @app.route('/get_avg_time')
 def get_avg_time():
@@ -81,4 +86,4 @@ if __name__ == '__main__':
     #     y = pickle.load(f)
     # timing = load(PATH + TIMER)
     timing = Timing()
-    app.run(host="ec2-3-70-178-147.eu-central-1.compute.amazonaws.com", port=8080)
+    app.run(host="0.0.0.0", port=8080)
