@@ -4,7 +4,7 @@ from math import radians, cos, sin, asin, sqrt
 import pandas as pd
 from joblib import dump
 
-PATH = "C:/ITC/Hackathon/Parker"
+# PATH = "C:/ITC/Hackathon/Parker"
 DATA_1 = '/data1.csv'
 TIMER = '/timer.pkl'
 TIME = 'AvgTime'
@@ -16,7 +16,7 @@ class Timing:
         """
         Extracting averaged time to find parking
         """
-        self.path = PATH
+        self.path = None
         self.data_name = DATA_1
         self.df = self.load_data()
         # self.X, self.y = self.X_y_split()
@@ -24,7 +24,7 @@ class Timing:
 
     def load_data(self):
         """ loading the data to pandas DataFrame and prints shape"""
-        df = pd.read_csv(self.path + self.data_name)
+        df = pd.read_csv(self.data_name)
         print(f'Data shape: {df.shape}')
         return df
 
