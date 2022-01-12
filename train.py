@@ -9,7 +9,7 @@ from sklearn.ensemble import RandomForestClassifier
 from joblib import dump
 
 PATH = "C:/ITC/Hackathon/Parker"
-DATA_1 = '/data1.csv'
+DATA_1 = 'data1.csv'
 TIMER = '/timer.pkl'
 TIME = 'AvgTime'
 POINT = 'point'
