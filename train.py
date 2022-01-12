@@ -9,7 +9,7 @@ from sklearn.ensemble import RandomForestClassifier
 from joblib import dump
 
 
-PATH = "C:/ITC/Hackathon/Parker"
+PATH = "ec2-3-70-178-147.eu-central-1.compute.amazonaws.com"
 DATA_1 = 'data1.csv'
 TIMER = '/timer.pkl'
 TIME = 'AvgTime'
