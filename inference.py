@@ -5,8 +5,8 @@ import pandas as pd
 from joblib import dump
 from datetime import datetime
 
-# PATH = "C:/ITC/Hackathon/Parker"
-DATA_1 = '/data1.csv'
+# PATH = "C:/ITC/Hackathon/Parker/data1.csv"  # local
+PATH = '/data1.csv'  # server
 TIMER = '/timer.pkl'
 TIME = 'AvgTime'
 POINT = 'point'
@@ -17,8 +17,7 @@ class Timing:
         """
         Extracting averaged time to find parking
         """
-        self.path = None
-        self.data_name = DATA_1
+        self.data_name = PATH
         self.df = self.load_data()
         # self.X, self.y = self.X_y_split()
         # self.d = self.single_pt_haversine(self.lat, self.lng)
@@ -52,10 +51,14 @@ class Timing:
         :param lat: latitude coordinate
         :param lng: longitude coordinate
         :param time: time of searching parking
+        @return: average parking time. If unknown - return -1
         """
         d = round(self.single_pt_haversine(lat, lng))
-        time = self.df[TIME][self.df[POINT] == d].values[0]
-        return float(time)
+        time = self.df[TIME][self.df[POINT] == d].values
+        if time:
+            return float(time[0])
+        else:
+            return -1
 
     def save_to_pickle(self, dir):
         dump(self.__class__, dir)
@@ -86,4 +89,5 @@ if __name__ == '__main__':
     #     y = pickle.load(f)
     # timing = load(PATH + TIMER)
     timing = Timing()
-    app.run(host="0.0.0.0", port=8080)
+    app.run(host="0.0.0.0", port=8080)  # remote server
+    # app.run(host='127.0.0.1', port=5000)  # local server
