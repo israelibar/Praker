@@ -6,7 +6,7 @@ from joblib import dump
 from datetime import datetime
 
 # PATH = "C:/ITC/Hackathon/Parker/data1.csv"  # local
-PATH = '/data1.csv'  # server
+PATH = 'data1.csv'  # server
 TIMER = '/timer.pkl'
 TIME = 'AvgTime'
 POINT = 'point'
