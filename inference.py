@@ -4,9 +4,11 @@ from math import radians, cos, sin, asin, sqrt
 import pandas as pd
 from joblib import dump
 from datetime import datetime
+import pygeohash as pgh
+import numpy as np
 
-# PATH = "C:/ITC/Hackathon/Parker/data1.csv"  # local
-PATH = 'data1.csv'  # server
+# PATH = "C:/ITC/Hackathon/Parker/geo_df.csv"  # local
+PATH = 'geo_df.csv'  # server
 TIMER = '/timer.pkl'
 TIME = 'AvgTime'
 POINT = 'point'
@@ -19,6 +21,7 @@ class Timing:
         """
         self.data_name = PATH
         self.df = self.load_data()
+        self.all_geohash = np.array(self.df.iloc[:, [0]])
         # self.X, self.y = self.X_y_split()
         # self.d = self.single_pt_haversine(self.lat, self.lng)
 
@@ -45,7 +48,13 @@ class Timing:
 
         return d
 
-    def get_avg_time(self, lat, lng, time=None):
+    def get_geohash(self, lat, lng, precision=7):
+        """Transforming latitude longitude coordinates to geohash"""
+        geohash = pgh.encode(lat, lng, precision)
+        return geohash
+
+
+    def get_avg_time_d(self, lat, lng):
         """
         Getting averaged time
         :param lat: latitude coordinate
@@ -59,6 +68,36 @@ class Timing:
             return float(time[0])
         else:
             return -1
+
+    def find_closest_geohash(self, geohash):
+        """Finding the closest geohash to a given geohash
+        return tuple of (closest geohash, distance to the closest geohash)"""
+        # all_geohash = np.array(self.df.iloc[:, [0]])
+        d = [pgh.geohash_approximate_distance(geohash, i[0]) for i in self.all_geohash]
+        closest_geo = self.all_geohash[np.argmin(d)]
+        return closest_geo[0], np.argmin(d)
+
+    def get_avg_time_geohash(self, lat, lng, time=None):
+        """
+        Getting averaged time
+        :param lat: latitude coordinate
+        :param lng: longitude coordinate
+        :param time: time of searching parking
+        @return: average parking time. If unknown - return -1
+        """
+        geohash = pgh.encode(lat, lng, 7)
+        print(geohash)
+        time = self.df['AvgTimeToPark'][self.df['Geohash'] == geohash].values
+        print(time)
+        if time:
+            return float(time[0])
+        else:
+            closest_geo = self.find_closest_geohash(geohash)
+            if closest_geo[1] <= 10000:  # If point is close in less than 10 km
+                time = self.df['AvgTimeToPark'][self.df['Geohash'] == str(closest_geo[0])].values
+                return time[0]
+            else:
+                return -1
 
     def save_to_pickle(self, dir):
         dump(self.__class__, dir)
@@ -78,9 +117,9 @@ def get_avg_time():
     lat = request.args.get('lat')
     lng = request.args.get('lng')
     time = request.args.get('time')
-    avg_time = timing.get_avg_time(float(lat), float(lng), None)  # replace None with time when relevant
+    avg_time = timing.get_avg_time_geohash(float(lat), float(lng), None)  # replace None with time when relevant
 
-    return int(round(avg_time))
+    return str(int(avg_time))
 
 
 if __name__ == '__main__':
