@@ -95,7 +95,7 @@ class Timing:
             closest_geo = self.find_closest_geohash(geohash)
             if closest_geo[1] <= 10000:  # If point is close in less than 10 km
                 time = self.df['AvgTimeToPark'][self.df['Geohash'] == str(closest_geo[0])].values
-                return time[0]
+                return int(time[0])
             else:
                 return -1
 
@@ -119,7 +119,7 @@ def get_avg_time():
     time = request.args.get('time')
     avg_time = timing.get_avg_time_geohash(float(lat), float(lng), None)  # replace None with time when relevant
 
-    return str(int(avg_time))
+    return str(int(round(avg_time)))
 
 
 if __name__ == '__main__':

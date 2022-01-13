@@ -4,7 +4,7 @@ import requests
 
 URL = "http://ec2-3-70-178-147.eu-central-1.compute.amazonaws.com:8080"
 ROUTE = "/get_avg_time"
-SAMPLE_TEST = 20
+SAMPLE_TEST = 100
 LOCAL_URL = "http://127.0.0.1:5000"
 
 
@@ -16,8 +16,9 @@ def get_time_from_api(df, n=SAMPLE_TEST):
     @:return: np.array of predictions ('0' or '1')
     """
     x = df.sample(n, random_state=42).to_dict('records')
-    preds = np.array([float(requests.get(url=URL + ROUTE, params=row).text)
+    preds = np.array([(requests.get(url=LOCAL_URL + ROUTE, params=row).text)
                       for row in x])
+    # preds = requests.get(url=URL + ROUTE, params={'lat':-115.3, 'lng':43.8}).text
     return preds
 
 
